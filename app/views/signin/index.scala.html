@@ -10,9 +10,7 @@
 
 @main(title, nav = "signin") {
         @helper.form(routes.SignIn.authenticate) {
-            
-            <h1>登录</h1>
-            
+              
             @if(signinForm.hasGlobalErrors) { 
                 <p class="error">
                     @signinForm.globalError.message
@@ -26,13 +24,13 @@
             }
             
             <p>
-                <input type="text" name="username" placeholder="username" value="@signinForm("username").value">
+                <input type="text" name="username" placeholder="用户名" value="@signinForm("username").value">
             </p>
             <p>
-                <input type="password" name="password" placeholder="Password">
+                <input type="password" name="password" placeholder="密码">
             </p>
             <p>
-                <button type="submit">Login</button>
+                <button type="submit" class="btn primary">登陆</button>
             </p>
             
         }        
