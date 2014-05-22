@@ -1,0 +1,42 @@
+@(signinForm: Form[User])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@title = {
+    登录
+}
+
+
+@main(title, nav = "signin") {
+        @helper.form(routes.SignIn.authenticate) {
+            
+            <h1>登录</h1>
+            
+            @if(signinForm.hasGlobalErrors) { 
+                <p class="error">
+                    @signinForm.globalError.message
+                </p>
+            }
+            
+            @if(flash.contains("success")) {
+                <p class="success">
+                    @flash.get("success")
+                </p>
+            }
+            
+            <p>
+                <input type="text" name="username" placeholder="username" value="@signinForm("username").value">
+            </p>
+            <p>
+                <input type="password" name="password" placeholder="Password">
+            </p>
+            <p>
+                <button type="submit">Login</button>
+            </p>
+            
+        }        
+}
+    
+
+

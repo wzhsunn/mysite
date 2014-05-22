@@ -1,0 +1,12 @@
+@(users: List[User])
+
+@main(Html("Welcome to Play")) {
+
+<p>debug list user</p>
+
+<ul>
+@for(user <- users){
+	<li>@user.username (@user.password)</li>
+}
+</ul>
+}

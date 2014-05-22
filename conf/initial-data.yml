@@ -1,0 +1,16 @@
+
+# Users
+
+users:
+
+    - !!models.User
+        email:      guillaume@sample.com
+        username:   sun1
+        password:   secret
+    
+    - !!models.User
+        email:      maxime@sample.com
+        username:   sun2
+        password:   secret
+    
+            

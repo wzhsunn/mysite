@@ -1,7 +1,15 @@
 @(message: String)
 
-@main("Welcome to Play") {
+@main(Html("Welcome to Play")) {
 
-    @play20.welcome(message, style = "Java")
-
+   <p class="button">
+   <a href="@routes.SignUp.blank">注册</a>
+   </p>
+<p class="button">
+   <a href="@routes.SignIn.blank">登录</a>
+   </p>
+   <br />
+   <p class="button">
+   <a href="@routes.Application.listuser">listuser</a>
+   </p>
 }

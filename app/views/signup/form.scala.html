@@ -1,0 +1,53 @@
+@(signupForm: Form[User])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@title = {
+    用户注册
+}
+
+@main(title, nav = "signup") {
+    
+    @helper.form(action = routes.SignUp.submit) {
+        
+        <fieldset>
+            <legend>用户注册</legend>
+          
+            @inputText(
+                signupForm("username"), 
+                '_label -> "用户名", 
+                '_help -> "4-18个字符，建议实名注册。",
+                '_error -> signupForm.globalError
+            )
+          
+           
+            
+            @inputPassword(
+                signupForm("password"), 
+                '_label -> "密码",
+                '_help -> "密码长度为6-16个字符。 "
+            )
+            
+            @inputPassword(
+                signupForm("repeatPassword"), 
+                '_label -> "确认密码",
+                '_help -> "请再次输入您的密码。",
+                '_error -> signupForm.error("password")
+            )
+              
+            @inputText(
+                signupForm("email"), 
+                '_label -> "邮箱",
+                '_help -> ""
+            )
+        </fieldset>
+                
+        <div class="actions">
+            <input type="submit" class="btn primary" value="确定">
+            <a href="@routes.Application.index" class="btn">取消</a>
+        </div>
+        
+    }
+    
+}
