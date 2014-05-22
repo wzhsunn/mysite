@@ -18,16 +18,21 @@ public class User extends Model {
 	@Id
     public Long id;
 	
-    @Constraints.Required
+    @Constraints.Required(message="用户名不能为空")
+    @Formats.NonEmpty
     public String username;
     
-    @Constraints.Required
+    @Constraints.Required(message="密码不能为空")
+    @Formats.NonEmpty
     public String password;
     
     public String email;
     
     public String phone;
     
+    public User(){
+    	
+    }
     // -- Queries
     
     public static Model.Finder<String,User> find = new Model.Finder<String,User>(String.class, User.class);
@@ -46,6 +51,9 @@ public class User extends Model {
         return find.where().eq("email", email).findUnique();
     }
     
+    public static User findByUsername(String username){
+    	return find.where().eq("username", username).findUnique();
+    }
     /**
      * Authenticate a User.
      */
@@ -61,5 +69,11 @@ public class User extends Model {
     public String toString() {
         return "username[" + username + ", password[" + password +"]";
     }
-
+    
+    public String validate() {
+        if(User.authenticate(username, password) == null) {
+            return "用户名或密码错误。";
+        }
+        return null;
+    }
 }

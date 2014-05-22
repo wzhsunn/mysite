@@ -21,22 +21,16 @@ public class SignIn extends Controller {
      * Handle login form submission.
      */
     public static Result authenticate() {
-        Form<User> loginForm = form(User.class).bindFromRequest();
-        User user = loginForm.get();
-        
-        Logger.debug("user " + user.toString());
-        
-        if(User.authenticate(user.username, user.password) == null){
-        	Logger.debug("run here");
+        Form<User> loginForm = form(User.class).bindFromRequest();       
+        if(loginForm.hasErrors()){
+        	String err = loginForm.errorsAsJson().toString();
+        	Logger.debug(err);
         	 return badRequest(index.render(loginForm));
-        }else if(loginForm.hasErrors()) {
-            return badRequest(index.render(loginForm));
-        } else {
+        }
+        else {
             session("username", loginForm.get().username);
-            return ok(summary.render(loginForm.get()));
-//            return redirect(
-//                routes.SignUp.index()
-//            );
+            User findUser = User.findByUsername(loginForm.get().username);
+            return ok(summary.render(findUser));
         }
     }
 }

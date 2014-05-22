@@ -22,12 +22,19 @@
                     @flash.get("success")
                 </p>
             }
+      		
             
             <p>
                 <input type="text" name="username" placeholder="用户名" value="@signinForm("username").value">
+                @if(signinForm.hasErrors){
+                @signinForm.error("username").message()
+                }
             </p>
             <p>
                 <input type="password" name="password" placeholder="密码">
+                 @if(signinForm.hasErrors()){
+                	@signinForm.error("password").message()
+                 }
             </p>
             <p>
                 <button type="submit" class="btn primary">登陆</button>
