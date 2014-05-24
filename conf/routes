@@ -5,6 +5,9 @@
 # Home page
 GET     /                           controllers.Application.index()
 
+#register
+GET 	/register					controllers.Passport.register()
+POST	/reister					controllers.Passport.registerSubmit()
 # Signup
 GET     /signup                     controllers.SignUp.blank()
 #GET     /users/fakeuser            controllers.SignUp.edit()
