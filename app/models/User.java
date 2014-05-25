@@ -6,24 +6,27 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import play.data.format.Formats;
-import play.data.validation.Constraints;
+import play.data.validation.Constraints.MaxLength;
+import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import play.data.validation.Constraints;
 
 @Entity 
 @Table(name="account")
 public class User extends Model {
 	private static final long serialVersionUID = 1L;
 
+	public interface All {}
 	@Id
     public Long id;
 	
-    @Constraints.Required(message="用户名不能为空")
-    @Formats.NonEmpty
+    @Required(groups={All.class})
+//    @MinLength(value=4,  groups={All.class})
+    //@MaxLength(value=18)
     public String username;
     
     @Constraints.Required(message="密码不能为空")
-    @Formats.NonEmpty
     public String password;
     
     public String email;

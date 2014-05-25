@@ -5,3 +5,4 @@ password=密码
 login=登录
 logout=退出
 invalid.user.or.password=用户名或密码错误
+passport.password.not.match=密码不一致

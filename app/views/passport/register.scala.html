@@ -8,13 +8,14 @@
     
     @helper.form(action = routes.Passport.registerSubmit) {
         
+      
         <fieldset>
                   
             @inputText(
                 signupForm("username"), 
                 '_label -> "用户名", 
-                '_help -> "4-18个字符，建议实名注册。",
-                '_error -> signupForm.globalError
+                '_help -> "4-18个字符",
+                '_error -> signupForm.error("username")
             )
           
            

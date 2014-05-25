@@ -1,17 +1,14 @@
 package controllers;
 
 import static play.data.Form.form;
-
-import java.util.UUID;
-
 import models.User;
 import play.Logger;
 import play.data.Form;
 import play.data.validation.Constraints;
+import play.data.validation.Constraints.Email;
 import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
-
 import views.html.passport.register;
 import views.html.passport.registerOk;
 import views.html.passport.login;
@@ -28,7 +25,7 @@ public class Passport extends Controller {
 	
 	public static Result register() {
         return ok(
-            register.render(form(Register.class))
+            register.render(form(Register.class, User.All.class))
         );
     }
 	
@@ -36,14 +33,24 @@ public class Passport extends Controller {
      * Handle login form submission.
      */
     public static Result registerSubmit() {
-    	 Form<Register> registerForm = form(Register.class).bindFromRequest();
-
+    	 Form<Register> registerForm = form(Register.class, User.All.class).bindFromRequest();
+    	 
+    	 if(registerForm.hasErrors() == false){
+    		 String username = registerForm.get().username;
+    		 if(username.trim() == ""){
+    			registerForm.reject("username", Messages.get("passport.username.empty")); 
+    		 }
+    		 else if(User.findByUsername(registerForm.get().username) != null){
+         		 registerForm.reject("username", Messages.get("passport.username.exists"));
+         	 }
+         }
+    	 
     	 if(!registerForm.field("password").valueOr("").isEmpty()) {
              if(!registerForm.field("password").valueOr("").equals(registerForm.field("repeatPassword").value())) {
-            	 registerForm.reject("repeatPassword", "Password don't match");
+            	 registerForm.reject("repeatPassword", Messages.get("passport.password.not.match"));
              }
          }
-         
+       
          if (registerForm.hasErrors()) {
              return badRequest(register.render(registerForm));
          }
@@ -68,8 +75,10 @@ public class Passport extends Controller {
          return badRequest(register.render(registerForm));
     }
     
+    //TODO validation
     public static class Register {
 
+    	@Email
         public String email;
         
         public String phone;
@@ -87,10 +96,6 @@ public class Passport extends Controller {
          * @return null if validation ok, string with details otherwise
          */
         public String validate() {
-            if (isBlank(email)) {
-                return "Email is required";
-            }
-
             if (isBlank(username)) {
                 return "Full name is required";
             }
