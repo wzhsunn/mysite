@@ -17,13 +17,10 @@ import play.data.validation.Constraints;
 public class User extends Model {
 	private static final long serialVersionUID = 1L;
 
-	public interface All {}
 	@Id
     public Long id;
 	
-    @Required(groups={All.class})
-//    @MinLength(value=4,  groups={All.class})
-    //@MaxLength(value=18)
+    @Required
     public String username;
     
     @Constraints.Required(message="密码不能为空")

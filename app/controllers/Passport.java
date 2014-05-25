@@ -1,6 +1,9 @@
 package controllers;
 
 import static play.data.Form.form;
+
+import javax.validation.Constraint;
+
 import models.User;
 import play.Logger;
 import play.data.Form;
@@ -25,7 +28,7 @@ public class Passport extends Controller {
 	
 	public static Result register() {
         return ok(
-            register.render(form(Register.class, User.All.class))
+            register.render(form(Register.class))
         );
     }
 	
@@ -33,18 +36,15 @@ public class Passport extends Controller {
      * Handle login form submission.
      */
     public static Result registerSubmit() {
-    	 Form<Register> registerForm = form(Register.class, User.All.class).bindFromRequest();
+    	 Form<Register> registerForm = form(Register.class).bindFromRequest();
+    	 String errors = registerForm.errors().toString();
+    	 Logger.debug(errors);
     	 
     	 if(registerForm.hasErrors() == false){
-    		 String username = registerForm.get().username;
-    		 if(username.trim() == ""){
-    			registerForm.reject("username", Messages.get("passport.username.empty")); 
-    		 }
-    		 else if(User.findByUsername(registerForm.get().username) != null){
+    		 if(User.findByUsername(registerForm.get().username) != null){
          		 registerForm.reject("username", Messages.get("passport.username.exists"));
          	 }
          }
-    	 
     	 if(!registerForm.field("password").valueOr("").isEmpty()) {
              if(!registerForm.field("password").valueOr("").equals(registerForm.field("repeatPassword").value())) {
             	 registerForm.reject("repeatPassword", Messages.get("passport.password.not.match"));
@@ -78,15 +78,20 @@ public class Passport extends Controller {
     //TODO validation
     public static class Register {
 
-    	@Email
+    	@Email(message="email格式不对")
         public String email;
-        
+        //TODO:phone valid
+    	@Constraints.Pattern(value="^1[3|4|5|8][0-9]\\d{4,8}$", message="手机格式必须正确" )
         public String phone;
         
-        @Constraints.Required
+        @Constraints.Required(message="不能为空")
+        @Constraints.MinLength(value=4,  message="不得少于4个字符")
+        @Constraints.MaxLength(value=18, message="不得超过18个字符")
         public String username;
 
-        @Constraints.Required
+        @Constraints.Required(message="不能为空")
+        @Constraints.MinLength(value=6,  message="不得少于4个字符")
+        @Constraints.MaxLength(value=18, message="不得超过18个字符")
         public String password;
 
         
