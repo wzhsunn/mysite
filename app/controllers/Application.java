@@ -16,5 +16,4 @@ public class Application extends Controller {
 //    	List<User> users = User.findAll();
     	return ok(userlist.render(User.findAll()));
     }
-  
 }

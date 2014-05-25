@@ -38,9 +38,16 @@ public class Passport extends Controller {
     public static Result registerSubmit() {
     	 Form<Register> registerForm = form(Register.class).bindFromRequest();
 
+    	 if(!registerForm.field("password").valueOr("").isEmpty()) {
+             if(!registerForm.field("password").valueOr("").equals(registerForm.field("repeatPassword").value())) {
+            	 registerForm.reject("repeatPassword", "Password don't match");
+             }
+         }
+         
          if (registerForm.hasErrors()) {
              return badRequest(register.render(registerForm));
          }
+         
 
          Register registerObj = registerForm.get();
         
