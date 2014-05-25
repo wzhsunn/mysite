@@ -1,6 +1,7 @@
 package controllers;
 
 import play.*;
+import play.data.validation.Constraints;
 import play.mvc.*;
 import models.User;
 import views.html.*;
@@ -15,4 +16,5 @@ public class Application extends Controller {
 //    	List<User> users = User.findAll();
     	return ok(userlist.render(User.findAll()));
     }
+  
 }

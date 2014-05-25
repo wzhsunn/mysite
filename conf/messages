@@ -1,1 +1,7 @@
 validation.required = 不能为空
+
+username=用户名
+password=密码	
+login=登录
+logout=退出
+invalid.user.or.password=用户名或密码错误

@@ -1,0 +1,35 @@
+@(loginForm: Form[Passport.Login])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+
+
+@main(nav = "signin") {
+        @helper.form(routes.Passport.loginSubmit) {
+              
+           
+    @if(loginForm.hasGlobalErrors) {
+        <p class="error">
+            <span class="label label-danger">@loginForm.globalError.message</span>
+        </p>
+    }
+
+    <fieldset>
+        @inputText(
+            loginForm("username"),
+            '_label -> Messages("username")
+        )
+        @inputPassword(
+            loginForm("password"),
+            '_label -> Messages("password")
+        )
+    </fieldset>
+
+    <div class="form-actions">
+        <input type="submit" class="btn btn-primary" value="@Messages("login")">
+    </div>
+            
+        }        
+}
+    

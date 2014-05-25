@@ -4,19 +4,19 @@
 
 # Home page
 GET     /                           controllers.Application.index()
+GET     /dashboard                  controllers.Dashboard.index()
+
 
 #register
 GET 	/register					controllers.Passport.register()
-POST	/reister					controllers.Passport.registerSubmit()
-# Signup
-GET     /signup                     controllers.SignUp.blank()
-#GET     /users/fakeuser            controllers.SignUp.edit()
-POST    /signup                     controllers.SignUp.submit()
+POST	/register					controllers.Passport.registerSubmit()
 
-#Signin
-GET 	/signin						controllers.SignIn.blank()
-POST    /signin                      controllers.SignIn.authenticate()	
-#GET     /logout                     controllers.Application.logout()
+#login
+GET		/login						controllers.Passport.login()
+POST	/login						controllers.Passport.loginSubmit()
+
+GET		/logout						controllers.Passport.logout()
+
 GET		/listuser					controllers.Application.listuser()
 
 # Map static resources from the /public folder to the /assets URL path

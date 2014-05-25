@@ -1,15 +1,12 @@
-@(signupForm: Form[User])
+@(signupForm: Form[Passport.Register])
 
 @import helper._
 @import helper.twitterBootstrap._
 
-@title = {
-    用户注册
-}
 
-@main(title, nav = "signup") {
+@main(nav = "signup") {
     
-    @helper.form(action = routes.SignUp.submit) {
+    @helper.form(action = routes.Passport.registerSubmit) {
         
         <fieldset>
                   
@@ -38,6 +35,12 @@
             @inputText(
                 signupForm("email"), 
                 '_label -> "邮箱",
+                '_help -> ""
+            )
+            
+             @inputText(
+                signupForm("phone"), 
+                '_label -> "手机",
                 '_help -> ""
             )
         </fieldset>

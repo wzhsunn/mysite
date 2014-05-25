@@ -1,0 +1,25 @@
+@(user: User)
+
+@main(user, nav = "signup") {
+    
+    <h2>个人信息:</h2>
+    
+    <h6>用户名</h6>
+    
+    <p>
+        @user.username
+    </p>
+    
+    <h6>邮箱</h6>
+    
+    <p>
+        @user.email
+    </p>
+    
+    <h6>密码</h6>
+    
+    <p>
+        @user.password
+    </p>
+    
+}
