@@ -1,8 +1,8 @@
 This is your new Play application
 =====================================
-play framework for signup and signin 
-实现了用户注册和登录
-*注册*
+*play framework for signup and signin *
+# 实现了用户注册和登录
+*注册* 
 *用户名存在验证
 *用户名为空验证
 *用户名长度验证
