@@ -5,6 +5,7 @@ import static play.data.Form.form;
 import javax.validation.Constraint;
 
 import models.User;
+import models.utils.Hash;
 import play.Logger;
 import play.data.Form;
 import play.data.validation.Constraints;
@@ -64,7 +65,8 @@ public class Passport extends Controller {
              user.email = registerObj.email;
              user.phone = registerObj.phone;
              user.username = registerObj.username;
-             user.password = registerObj.password;//TODO //Hash.createPassword(register.password);
+             user.password =  Hash.createPassword(registerObj.password);
+             //TODO //Hash.createPassword(register.password);
              user.save();
 
              return ok(registerOk.render());

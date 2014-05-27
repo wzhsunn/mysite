@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import models.utils.Hash;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
@@ -57,11 +58,16 @@ public class User extends Model {
     /**
      * Authenticate a User.
      */
-    public static User authenticate(String username, String password) {
-        return find.where()
-            .eq("username", username)
-            .eq("password", password)
-            .findUnique();
+    public static User authenticate(String username, String clearPassword) {
+    	  // get the user with email only to keep the salt password
+        User user = find.where().eq("username", username).findUnique();
+        if (user != null) {
+            // get the hash password from the salt + clear password
+            if (Hash.checkPassword(clearPassword, user.password)) {
+                return user;
+            }
+        }
+        return null;
     }
     
     // --
