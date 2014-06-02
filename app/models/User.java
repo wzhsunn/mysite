@@ -1,5 +1,6 @@
 package models;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -7,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import models.utils.Hash;
+import play.data.format.Formats;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
@@ -30,6 +32,16 @@ public class User extends Model {
     public String email;
     
     public String phone;
+    
+    public String type;
+    
+    @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date loginTime;
+    public String loginIp;
+    @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date regTime;
+    public String regIp;
+    public String status;
     
     public User(){
     	

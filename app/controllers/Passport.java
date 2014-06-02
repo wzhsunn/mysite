@@ -3,7 +3,7 @@ package controllers;
 import static play.data.Form.form;
 
 import javax.validation.Constraint;
-
+import java.util.Date;
 import models.User;
 import models.utils.Hash;
 import play.Logger;
@@ -66,7 +66,8 @@ public class Passport extends Controller {
              user.phone = registerObj.phone;
              user.username = registerObj.username;
              user.password =  Hash.createPassword(registerObj.password);
-             //TODO //Hash.createPassword(register.password);
+             user.regTime = new java.util.Date();
+             user.regIp = request().remoteAddress();
              user.save();
 
              return ok(registerOk.render());
