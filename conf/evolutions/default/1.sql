@@ -9,6 +9,12 @@ create table account (
   password                  varchar(255),
   email                     varchar(255),
   phone                     varchar(255),
+  type                      varchar(255),
+  login_time                timestamp,
+  login_ip                  varchar(255),
+  reg_time                  timestamp,
+  reg_ip                    varchar(255),
+  status                    varchar(255),
   constraint pk_account primary key (id))
 ;
 

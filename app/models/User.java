@@ -1,11 +1,14 @@
 package models;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import models.utils.Hash;
+import play.data.format.Formats;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
@@ -29,6 +32,16 @@ public class User extends Model {
     public String email;
     
     public String phone;
+    
+    public String type;
+    
+    @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date loginTime;
+    public String loginIp;
+    @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date regTime;
+    public String regIp;
+    public String status;
     
     public User(){
     	
@@ -57,11 +70,16 @@ public class User extends Model {
     /**
      * Authenticate a User.
      */
-    public static User authenticate(String username, String password) {
-        return find.where()
-            .eq("username", username)
-            .eq("password", password)
-            .findUnique();
+    public static User authenticate(String username, String clearPassword) {
+    	  // get the user with email only to keep the salt password
+        User user = find.where().eq("username", username).findUnique();
+        if (user != null) {
+            // get the hash password from the salt + clear password
+            if (Hash.checkPassword(clearPassword, user.password)) {
+                return user;
+            }
+        }
+        return null;
     }
     
     // --
