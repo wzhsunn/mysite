@@ -16,6 +16,7 @@ import play.mvc.Result;
 import views.html.passport.register;
 import views.html.passport.registerOk;
 import views.html.passport.login;
+import views.html.passport.update;
 
 public class Passport extends Controller {
 	
@@ -32,6 +33,23 @@ public class Passport extends Controller {
             register.render(form(Register.class))
         );
     }
+	
+	public static Result update(){
+		String username = session("username");
+		User user = User.findByUsername(username);
+		Logger.debug(user.toString());
+		Register registerUser = new Register(user);
+		Form<Register> registerForm = form(Register.class);
+		registerForm.fill(registerUser);
+
+		return ok(
+				update.render(registerForm)
+				);
+	}
+	
+	public static Result updateSubmit(){
+		return TODO;
+	}
 	
     /**
      * Handle login form submission.
@@ -81,6 +99,7 @@ public class Passport extends Controller {
     //TODO validation
     public static class Register {
 
+    	
     	@Email(message="email格式不对")
         public String email;
         //TODO:phone valid
@@ -97,7 +116,13 @@ public class Passport extends Controller {
         @Constraints.MaxLength(value=18, message="不得超过18个字符")
         public String password;
 
-        
+        public Register(){}
+        public Register(User user){
+        	email = user.email;
+        	phone = user.phone;
+        	username = user.username;
+        	password = user.password;
+        }
         /**
          * Validate the authentication.
          *
