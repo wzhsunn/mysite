@@ -12,7 +12,7 @@ GET 	/register					controllers.Passport.register()
 POST	/register					controllers.Passport.registerSubmit()
 
 #update 
-GET		/update						controllers.Passport.update()
+GET		/update/:username			controllers.Passport.update(username: String)
 POST	/update						controllers.Passport.updateSubmit()
 
 #login

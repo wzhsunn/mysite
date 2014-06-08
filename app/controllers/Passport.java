@@ -34,21 +34,57 @@ public class Passport extends Controller {
         );
     }
 	
-	public static Result update(){
-		String username = session("username");
+	public static Result update(String username){
 		User user = User.findByUsername(username);
-		Logger.debug(user.toString());
-		Register registerUser = new Register(user);
-		Form<Register> registerForm = form(Register.class);
-		registerForm.fill(registerUser);
-
+		Form<Register> userForm = form(Register.class).fill(new Register(user));
 		return ok(
-				update.render(registerForm)
+				update.render(user, userForm)
 				);
 	}
 	
 	public static Result updateSubmit(){
-		return TODO;
+		Form<Register> registerForm = form(Register.class).bindFromRequest();
+		String errors = registerForm.errors().toString();
+		Logger.debug(errors);
+
+//		if (registerForm.hasErrors() == false) {
+//			if (User.findByUsername(registerForm.get().username) != null) {
+//				registerForm.reject("username",
+//						Messages.get("passport.username.exists"));
+//			}
+//		}
+		if (!registerForm.field("password").valueOr("").isEmpty()) {
+			if (!registerForm.field("password").valueOr("")
+					.equals(registerForm.field("repeatPassword").value())) {
+				registerForm.reject("repeatPassword",
+						Messages.get("passport.password.not.match"));
+			}
+		}
+
+		if (registerForm.hasErrors()) {
+			return badRequest(register.render(registerForm));
+		}
+
+		Register registerObj = registerForm.get();
+
+		try {
+			
+			User user = User.findByUsername(registerObj.username);
+			user.email = registerObj.email;
+			user.phone = registerObj.phone;
+			user.username = registerObj.username;
+			user.password = Hash.createPassword(registerObj.password);
+			user.regTime = new java.util.Date();
+			user.regIp = request().remoteAddress();
+			user.save();
+
+			session("username", user.username);
+            return GO_DASHBOARD;
+		} catch (Exception e) {
+			Logger.error("Signup.save error", e);
+			flash("error", Messages.get("error.technical"));
+		}
+		return badRequest(register.render(registerForm));
 	}
 	
     /**

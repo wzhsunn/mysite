@@ -2,6 +2,8 @@ validation.required = 不能为空
 
 username=用户名
 password=密码	
+email=邮箱
+phone=手机
 login=登录
 logout=退出
 update=更新个人信息
