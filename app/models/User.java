@@ -7,8 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import models.utils.Hash;
-import play.data.validation.Constraints.MaxLength;
-import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import play.data.validation.Constraints;
