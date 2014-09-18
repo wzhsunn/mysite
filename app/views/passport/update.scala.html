@@ -1,45 +1,44 @@
-@(signupForm: Form[Passport.Register])
+@(user: User, userForm: Form[Passport.Register])
 
 @import helper._
 @import helper.twitterBootstrap._
 
 
-@main(nav = "signup") { 
-    @helper.form(action = routes.Passport.registerSubmit) {
+@main(user, nav = "signup") { 
+    @helper.form(action = routes.Passport.updateSubmit) {
         
-      
+     
         <fieldset>
-                  
-            @inputText(
-                signupForm("username"),
-                '_label -> "用户名", 
+        	@inputText(userForm("username"),   
+        		'_label -> "用户名", 
                 '_help -> "4-18个字符",
-                '_error -> signupForm.error("username")
-            )
-        
+                '_error -> userForm.error("username"),
+                'readonly -> "readonly"
+                )
+        	
             
             @inputPassword(
-                signupForm("password"), 
+                userForm("password"), 
                 '_label -> "密码",
                 '_help -> "密码长度为6-16个字符。 "
             )
             
             @inputPassword(
-                signupForm("repeatPassword"), 
+                userForm("repeatPassword"), 
                 '_label -> "确认密码",
                 '_help -> "请再次输入您的密码。",
-                '_error -> signupForm.error("password")
+                '_error -> userForm.error("password")
             )
               
             @inputText(
-                signupForm("email"), 
+                userForm("email"), 
                 '_label -> "邮箱",
                 '_help -> "",
-                '_value ->signupForm("email")
+                '_value ->userForm("email")
             )
             
              @inputText(
-                signupForm("phone"), 
+                userForm("phone"), 
                 '_label -> "手机",
                 '_help -> ""
             )

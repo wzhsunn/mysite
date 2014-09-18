@@ -3,7 +3,7 @@ package controllers;
 import static play.data.Form.form;
 
 import javax.validation.Constraint;
-
+import java.util.Date;
 import models.User;
 import models.utils.Hash;
 import play.Logger;
@@ -16,6 +16,7 @@ import play.mvc.Result;
 import views.html.passport.register;
 import views.html.passport.registerOk;
 import views.html.passport.login;
+import views.html.passport.update;
 
 public class Passport extends Controller {
 	
@@ -32,6 +33,59 @@ public class Passport extends Controller {
             register.render(form(Register.class))
         );
     }
+	
+	public static Result update(String username){
+		User user = User.findByUsername(username);
+		Form<Register> userForm = form(Register.class).fill(new Register(user));
+		return ok(
+				update.render(user, userForm)
+				);
+	}
+	
+	public static Result updateSubmit(){
+		Form<Register> registerForm = form(Register.class).bindFromRequest();
+		String errors = registerForm.errors().toString();
+		Logger.debug(errors);
+
+//		if (registerForm.hasErrors() == false) {
+//			if (User.findByUsername(registerForm.get().username) != null) {
+//				registerForm.reject("username",
+//						Messages.get("passport.username.exists"));
+//			}
+//		}
+		if (!registerForm.field("password").valueOr("").isEmpty()) {
+			if (!registerForm.field("password").valueOr("")
+					.equals(registerForm.field("repeatPassword").value())) {
+				registerForm.reject("repeatPassword",
+						Messages.get("passport.password.not.match"));
+			}
+		}
+
+		if (registerForm.hasErrors()) {
+			return badRequest(register.render(registerForm));
+		}
+
+		Register registerObj = registerForm.get();
+
+		try {
+			
+			User user = User.findByUsername(registerObj.username);
+			user.email = registerObj.email;
+			user.phone = registerObj.phone;
+			user.username = registerObj.username;
+			user.password = Hash.createPassword(registerObj.password);
+			user.regTime = new java.util.Date();
+			user.regIp = request().remoteAddress();
+			user.save();
+
+			session("username", user.username);
+            return GO_DASHBOARD;
+		} catch (Exception e) {
+			Logger.error("Signup.save error", e);
+			flash("error", Messages.get("error.technical"));
+		}
+		return badRequest(register.render(registerForm));
+	}
 	
     /**
      * Handle login form submission.
@@ -66,7 +120,8 @@ public class Passport extends Controller {
              user.phone = registerObj.phone;
              user.username = registerObj.username;
              user.password =  Hash.createPassword(registerObj.password);
-             //TODO //Hash.createPassword(register.password);
+             user.regTime = new java.util.Date();
+             user.regIp = request().remoteAddress();
              user.save();
 
              return ok(registerOk.render());
@@ -80,6 +135,7 @@ public class Passport extends Controller {
     //TODO validation
     public static class Register {
 
+    	
     	@Email(message="email格式不对")
         public String email;
         //TODO:phone valid
@@ -96,7 +152,13 @@ public class Passport extends Controller {
         @Constraints.MaxLength(value=18, message="不得超过18个字符")
         public String password;
 
-        
+        public Register(){}
+        public Register(User user){
+        	email = user.email;
+        	phone = user.phone;
+        	username = user.username;
+        	password = user.password;
+        }
         /**
          * Validate the authentication.
          *

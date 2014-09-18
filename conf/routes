@@ -11,6 +11,10 @@ GET     /dashboard                  controllers.Dashboard.index()
 GET 	/register					controllers.Passport.register()
 POST	/register					controllers.Passport.registerSubmit()
 
+#update 
+GET		/update/:username			controllers.Passport.update(username: String)
+POST	/update						controllers.Passport.updateSubmit()
+
 #login
 GET		/login						controllers.Passport.login()
 POST	/login						controllers.Passport.loginSubmit()

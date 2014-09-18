@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.Date;
+
 import models.User;
 import play.mvc.Controller;
 import play.mvc.Security;
@@ -9,7 +11,10 @@ import views.html.dashbord.index;
 @Security.Authenticated(Secured.class)
 public class Dashboard extends Controller {
 	public static Result index(){
-		
-		return ok(index.render(User.findByUsername(request().username())));
+		User user = User.findByUsername(request().username());
+		user.loginTime = new Date();
+		user.loginIp = request().remoteAddress();
+		user.save();
+		return ok(index.render(user));
 	}
 }
